@@ -99,3 +99,46 @@ class Blog(Base):
     title = Column(String, nullable=False)
     text = Column(String, nullable=False)
     image = Column(String, nullable=False)
+
+
+
+class HeaderTabs(Base):
+    __tablename__ = "header_tab"
+
+    id = Column(Integer, primary_key=True, nullable=False, unique=True, autoincrement=True)
+    name = Column(String, unique=True, nullable=False)
+    sub_header_tabs = relationship("SubHeaderTabs", back_populates="header_tab")
+
+class SubHeaderTabs(Base):
+    __tablename__ = "sub_header_tabs"
+
+    id = Column(Integer, primary_key=True, nullable=False, unique=True, autoincrement=True)
+    name = Column(String, unique=True, nullable=False)
+    # Relationship with HeaderTabs
+    header_tab_id = Column(Integer, ForeignKey('header_tab.id'), nullable=False)
+    header_tab = relationship("HeaderTabs", back_populates="sub_header_tabs")
+
+    # Relationship with HeaderProducts
+    header_products = relationship("HeaderProducts", back_populates="sub_header_tabs")
+
+
+class HeaderProducts(Base):
+    __tablename__ = "header_products"
+
+    id = Column(Integer, primary_key=True, nullable=False, unique=True, autoincrement=True)
+    title = Column(String, nullable=False)
+    description = Column(String, nullable=False)
+    price = Column(Integer, nullable=False)
+    discount_percentage = Column(Float, nullable=False)
+    rating = Column(Float, nullable=False)
+    stock = Column(Integer, nullable=False)
+    brand = Column(String, nullable=False)
+    thumbnail = Column(String, nullable=False)
+    images = Column(ARRAY(String), nullable=False)
+    is_published = Column(Boolean, server_default="True", nullable=False)
+    created_at = Column(TIMESTAMP(timezone=True), server_default=text("NOW()"), nullable=False)
+
+    # Relationship with SubHeaderTabs
+    sub_header_tabs_id = Column(Integer, ForeignKey("sub_header_tabs.id", ondelete="CASCADE"), nullable=False)
+    sub_header_tabs = relationship("SubHeaderTabs", back_populates="header_products")
+
