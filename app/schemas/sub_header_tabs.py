@@ -10,11 +10,11 @@ class SubHeaderTabBase(BaseModel):
 
 class SubHeaderTabCreate(BaseModel):
     name: str
-    # header_tab_id: int  # Adding the header_tab_id field
+    header_tab_id: int  # Adding the header_tab_id field
 
 class SubHeaderTabUpdate(BaseModel):
     name: str
-    # header_tab_id: int  # Adding the header_tab_id field
+    header_tab_id: int  # Adding the header_tab_id field
 
 class SubHeaderTabOut(BaseModel):
     message: str
