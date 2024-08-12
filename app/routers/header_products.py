@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, Query, status
 from app.db.database import get_db
 from app.services.header_products import HeaderProductService
 from sqlalchemy.orm import Session
-from app.schemas.products import ProductCreate, ProductOut, ProductsOut, ProductOutDelete, ProductUpdate
+from app.schemas.header_products import HeaderProductCreate as ProductCreate, HeaderProductOut as ProductOut, HeaderProductssOut as ProductsOut, HeaderProductsOutDelete as ProductOutDelete, HeaderProductsUpdate as ProductUpdate
 from app.core.security import get_current_user, check_admin_role
 
 

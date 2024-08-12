@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from app.models.models import HeaderProducts, Category
-from app.schemas.header_products import HeaderProductsCreate, HeaderProductsUpdate
+from app.models.models import HeaderProducts, SubHeaderTabs as Category
+from app.schemas.header_products import HeaderProductCreate, HeaderProductsUpdate
 from app.utils.responses import ResponseHandler
 
 
@@ -19,10 +19,10 @@ class HeaderProductService:
         return ResponseHandler.get_single_success(headerProduct.title, headerProduct_id, headerProduct)
 
     @staticmethod
-    def create_header_product(db: Session, headerProduct: HeaderProductsCreate):
-        category_exists = db.query(Category).filter(Category.id == headerProduct.category_id).first()
+    def create_header_product(db: Session, headerProduct: HeaderProductCreate):
+        category_exists = db.query(Category).filter(Category.id == headerProduct.sub_header_tabs_id).first()
         if not category_exists:
-            ResponseHandler.not_found_error("Category", headerProduct.category_id)
+            ResponseHandler.not_found_error("Category", headerProduct.sub_header_tabs_id)
 
         headerProduct_dict = headerProduct.model_dump()
         db_headerProduct = HeaderProducts(**headerProduct_dict)

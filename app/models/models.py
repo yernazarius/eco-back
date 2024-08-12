@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, Integer, String, ForeignKey, Float, ARRAY, Enum, TIMESTAMP
+from sqlalchemy import Boolean, Column, Integer, String, ForeignKey, Float, ARRAY, Enum, TIMESTAMP, JSON
 from sqlalchemy.sql import text
 from sqlalchemy.orm import relationship
 from app.db.database import Base
@@ -120,6 +120,7 @@ class SubHeaderTabs(Base):
 
     # Relationship with HeaderProducts
     header_products = relationship("HeaderProducts", back_populates="sub_header_tabs")
+    header_articles = relationship("HeaderArticles", back_populates="sub_header_tabs")
 
 
 class HeaderProducts(Base):
@@ -142,3 +143,15 @@ class HeaderProducts(Base):
     sub_header_tabs_id = Column(Integer, ForeignKey("sub_header_tabs.id", ondelete="CASCADE"), nullable=False)
     sub_header_tabs = relationship("SubHeaderTabs", back_populates="header_products")
 
+
+class HeaderArticles(Base):
+    __tablename__ = "header_articles"
+
+    id = Column(Integer, primary_key=True, nullable=False, unique=True, autoincrement=True)
+    title = Column(String, nullable=False)
+    content = Column(JSON, nullable=False)  # Use JSON to store structured content
+    created_at = Column(TIMESTAMP(timezone=True), server_default=text("NOW()"), nullable=False)
+
+    # Relationship with SubHeaderTabs
+    sub_header_tabs_id = Column(Integer, ForeignKey("sub_header_tabs.id", ondelete="CASCADE"), nullable=False)
+    sub_header_tabs = relationship("SubHeaderTabs", back_populates="header_articles")

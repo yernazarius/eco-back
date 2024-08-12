@@ -1,5 +1,5 @@
 from fastapi.staticfiles import StaticFiles
-from app.routers import products, categories, carts, users, auth, accounts, blogs, header_tabs, sub_headers
+from app.routers import products, categories, carts, users, auth, accounts, blogs, header_tabs, sub_headers, header_products, header_articles
 from fastapi import FastAPI
 
 
@@ -55,5 +55,7 @@ app.include_router(auth.router)
 app.include_router(blogs.router)
 app.include_router(header_tabs.router)
 app.include_router(sub_headers.router)
+app.include_router(header_products.router)
+app.include_router(header_articles.router)
 
 app.mount("/media", StaticFiles(directory="media"), name="media")

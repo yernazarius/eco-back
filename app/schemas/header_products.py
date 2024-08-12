@@ -29,29 +29,51 @@ class HeaderProductsBase(BaseModel):
     images: List[str]
     is_published: bool
     created_at: datetime
-    category_id: int
-    category: SubHeaderTabBase
+    sub_header_tabs_id: int
+    sub_header_tabs: SubHeaderTabBase
 
     class Config(BaseConfig):
         pass
 
 
 # Create HeaderProducts
-class HeaderProductsCreate(HeaderProductsBase):
-    id: ClassVar[int]
-    category: ClassVar[SubHeaderTabBase]
+# class HeaderProductCreate(HeaderProductsBase):
+#     id: ClassVar[int]
+#     category: ClassVar[SubHeaderTabBase]
+
+#     class Config(BaseConfig):
+#         pass
+class HeaderProductCreate(BaseModel):
+    title: str
+    description: Optional[str]
+    price: int
+
+    @validator("discount_percentage", pre=True)
+    def validate_discount_percentage(cls, v):
+        if v < 0 or v > 100:
+            raise ValueError("discount_percentage must be between 0 and 100")
+        return v
+
+    discount_percentage: float
+    rating: float
+    stock: int
+    brand: str
+    thumbnail: str
+    images: List[str]
+    is_published: bool
+    sub_header_tabs_id: int
 
     class Config(BaseConfig):
         pass
 
 
 # Update HeaderProducts
-class HeaderProductsUpdate(HeaderProductsCreate):
+class HeaderProductsUpdate(HeaderProductCreate):
     pass
 
 
 # Get HeaderProductss
-class HeaderProductsOut(BaseModel):
+class HeaderProductOut(BaseModel):
     message: str
     data: HeaderProductsBase
 
