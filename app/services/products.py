@@ -49,8 +49,11 @@ class ProductService:
             category_id=product.category_id,
             thumbnail=thumbnail_path,
             images=image_paths,
-            is_published=True
+            is_published=True,
+            favourite=product.favourite,
+            recomended=product.recomended
         )
+        print(product)
 
         db.add(db_product)
         db.commit()

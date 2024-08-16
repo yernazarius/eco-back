@@ -83,6 +83,8 @@ class Product(Base):
     images = Column(ARRAY(String), nullable=False)
     is_published = Column(Boolean, server_default="True", nullable=False)
     created_at = Column(TIMESTAMP(timezone=True), server_default=text("NOW()"), nullable=False)
+    favourite = Column(Boolean, nullable=False)
+    recomended = Column(Boolean, nullable=False)
 
     # Relationship with category
     category_id = Column(Integer, ForeignKey("categories.id", ondelete="CASCADE"), nullable=False)
@@ -107,20 +109,25 @@ class HeaderTabs(Base):
 
     id = Column(Integer, primary_key=True, nullable=False, unique=True, autoincrement=True)
     name = Column(String, unique=True, nullable=False)
-    sub_header_tabs = relationship("SubHeaderTabs", back_populates="header_tab")
+    
+    # Relationship with SubHeaderTabs
+    sub_header_tabs = relationship("SubHeaderTabs", back_populates="header_tab", cascade="all, delete")
+
 
 class SubHeaderTabs(Base):
     __tablename__ = "sub_header_tabs"
 
     id = Column(Integer, primary_key=True, nullable=False, unique=True, autoincrement=True)
     name = Column(String, unique=True, nullable=False)
+
     # Relationship with HeaderTabs
-    header_tab_id = Column(Integer, ForeignKey('header_tab.id'), nullable=False)
+    header_tab_id = Column(Integer, ForeignKey('header_tab.id', ondelete="CASCADE"), nullable=False)
     header_tab = relationship("HeaderTabs", back_populates="sub_header_tabs")
 
     # Relationship with HeaderProducts
-    header_products = relationship("HeaderProducts", back_populates="sub_header_tabs")
+    header_products = relationship("HeaderProducts", back_populates="sub_header_tabs", cascade="all, delete")
     header_articles = relationship("HeaderArticles", back_populates="sub_header_tabs")
+
 
 
 class HeaderProducts(Base):
@@ -152,6 +159,6 @@ class HeaderArticles(Base):
     content = Column(JSON, nullable=False)  # Use JSON to store structured content
     created_at = Column(TIMESTAMP(timezone=True), server_default=text("NOW()"), nullable=False)
 
-    # Relationship with SubHeaderTabs
-    sub_header_tabs_id = Column(Integer, ForeignKey("sub_header_tabs.id", ondelete="CASCADE"), nullable=False)
+    # Allow NULL values for sub_header_tabs_id
+    sub_header_tabs_id = Column(Integer, ForeignKey("sub_header_tabs.id", ondelete="CASCADE"), nullable=True)
     sub_header_tabs = relationship("SubHeaderTabs", back_populates="header_articles")

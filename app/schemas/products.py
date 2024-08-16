@@ -1,7 +1,7 @@
 from fastapi import UploadFile
 from pydantic import BaseModel, Field, validator
 from datetime import datetime
-from typing import List, Optional, ClassVar
+from typing import List, Optional
 from app.schemas.categories import CategoryBase
 
 
@@ -15,13 +15,6 @@ class ProductBase(BaseModel):
     title: str
     description: Optional[str]
     price: int
-
-    @validator("discount_percentage", pre=True)
-    def validate_discount_percentage(cls, v):
-        if v < 0 or v > 100:
-            raise ValueError("discount_percentage must be between 0 and 100")
-        return v
-
     discount_percentage: float
     rating: float
     stock: int
@@ -30,6 +23,8 @@ class ProductBase(BaseModel):
     images: List[str]
     is_published: bool
     created_at: datetime
+    favourite: bool
+    recomended: bool
     category_id: int
     category: CategoryBase
 
@@ -47,12 +42,19 @@ class ProductCreate(BaseModel):
     stock: int
     brand: str
     category_id: int
+    favourite: bool
+    recomended: bool
     thumbnail: Optional[UploadFile] = Field(None, description="Thumbnail image")
     images: List[UploadFile] = Field([], description="List of images")
 
+    @validator("discount_percentage")
+    def validate_discount_percentage(cls, v):
+        if v < 0 or v > 100:
+            raise ValueError("discount_percentage must be between 0 and 100")
+        return v
+
     class Config(BaseConfig):
         pass
-
 
 
 # Update Product
@@ -79,7 +81,7 @@ class ProductsOut(BaseModel):
 
 # Delete Product
 class ProductDelete(ProductBase):
-    category: ClassVar[CategoryBase]
+    pass
 
 
 class ProductOutDelete(BaseModel):
