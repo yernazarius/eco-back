@@ -34,31 +34,7 @@ def get_product(product_id: int, db: Session = Depends(get_db)):
     status_code=status.HTTP_201_CREATED,
     response_model=ProductOut,
     dependencies=[Depends(check_admin_role)])
-async def create_product(
-        title: str = Form(...),
-        description: Optional[str] = Form(None),
-        price: int = Form(...),
-        discount_percentage: float = Form(...),
-        rating: float = Form(...),
-        stock: int = Form(...),
-        brand: str = Form(...),
-        category_id: int = Form(...),
-        thumbnail: UploadFile = File(None),
-        images: List[UploadFile] = File([]),
-        db: Session = Depends(get_db)):
-    
-    product = ProductCreate(
-        title=title,
-        description=description,
-        price=price,
-        discount_percentage=discount_percentage,
-        rating=rating,
-        stock=stock,
-        brand=brand,
-        category_id=category_id,
-        thumbnail=thumbnail,
-        images=images
-    )
+async def create_product( product: ProductCreate, db: Session = Depends(get_db)):
     return await ProductService.create_product(db, product)
 
 

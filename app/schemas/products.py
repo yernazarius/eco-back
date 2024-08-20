@@ -2,18 +2,15 @@ from fastapi import UploadFile
 from pydantic import BaseModel, Field, validator
 from datetime import datetime
 from typing import List, Optional
-from app.schemas.categories import CategoryBase
+from app.schemas.category_child import ChildCategoryBase
 
-
-# Base Models
 class BaseConfig:
     from_attributes = True
-
-
+# Base schema for Product
 class ProductBase(BaseModel):
     id: int
     title: str
-    description: Optional[str]
+    description: str
     price: int
     discount_percentage: float
     rating: float
@@ -21,68 +18,65 @@ class ProductBase(BaseModel):
     brand: str
     thumbnail: str
     images: List[str]
-    is_published: bool
-    created_at: datetime
+    is_published: bool = Field(default=True)
+    # created_at: datetime
     favourite: bool
     recomended: bool
-    category_id: int
-    category: CategoryBase
+    child_category_id: int
+    child_category: ChildCategoryBase
 
-    class Config(BaseConfig):
-        pass
+    class Config:
+        orm_mode = True
 
-
-# Create Product
+# Schema for creating a new Product
 class ProductCreate(BaseModel):
     title: str
-    description: Optional[str]
+    description: str
     price: int
     discount_percentage: float
     rating: float
     stock: int
     brand: str
-    category_id: int
+    thumbnail: str
+    images: List[str]
+    is_published: Optional[bool] = Field(default=True)
     favourite: bool
     recomended: bool
-    thumbnail: Optional[UploadFile] = Field(None, description="Thumbnail image")
-    images: List[UploadFile] = Field([], description="List of images")
+    child_category_id: int
+    
+    class Config:
+        orm_mode = True
 
-    @validator("discount_percentage")
-    def validate_discount_percentage(cls, v):
-        if v < 0 or v > 100:
-            raise ValueError("discount_percentage must be between 0 and 100")
-        return v
+# Schema for updating an existing Product
+class ProductUpdate(BaseModel):
+    title: Optional[str] = None
+    description: Optional[str] = None
+    price: Optional[int] = None
+    discount_percentage: Optional[float] = None
+    rating: Optional[float] = None
+    stock: Optional[int] = None
+    brand: Optional[str] = None
+    thumbnail: Optional[str] = None
+    images: Optional[List[str]] = None
+    is_published: Optional[bool] = None
+    favourite: Optional[bool] = None
+    recomended: Optional[bool] = None
+    child_category_id: Optional[int] = None
 
-    class Config(BaseConfig):
-        pass
-
-
-# Update Product
-class ProductUpdate(ProductCreate):
-    pass
-
-
-# Get Products
+# Output schema for a single Product
 class ProductOut(BaseModel):
     message: str
     data: ProductBase
 
-    class Config(BaseConfig):
-        pass
-
-
+# Output schema for a list of Products
 class ProductsOut(BaseModel):
     message: str
     data: List[ProductBase]
 
-    class Config(BaseConfig):
-        pass
-
-
-# Delete Product
-class ProductDelete(ProductBase):
-    pass
-
+# Schema for delete operation
+class ProductDelete(BaseModel):
+    id: int
+    title: str
 
 class ProductOutDelete(BaseModel):
     message: str

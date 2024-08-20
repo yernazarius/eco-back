@@ -1,5 +1,5 @@
 from fastapi.staticfiles import StaticFiles
-from app.routers import products, categories, carts, users, auth, accounts, blogs, header_tabs, sub_headers, header_products, header_articles
+from app.routers import products, category_grand, category_child, category_parent, carts, users, auth, accounts, blogs
 from fastapi import FastAPI
 
 
@@ -47,15 +47,12 @@ app = FastAPI(
 
 
 app.include_router(products.router)
-app.include_router(categories.router)
+app.include_router(category_grand.router)
+app.include_router(category_parent.router)
+app.include_router(category_child.router)
 app.include_router(carts.router)
 app.include_router(users.router)
 app.include_router(accounts.router)
 app.include_router(auth.router)
 app.include_router(blogs.router)
-app.include_router(header_tabs.router)
-app.include_router(sub_headers.router)
-app.include_router(header_products.router)
-app.include_router(header_articles.router)
 
-app.mount("/media", StaticFiles(directory="media"), name="media")
