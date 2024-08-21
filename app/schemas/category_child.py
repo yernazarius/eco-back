@@ -1,5 +1,6 @@
 from typing import List, Optional
 from pydantic import BaseModel, Field
+from app.schemas.category_parent import ParentCategoryProduct
 
 # Base schema for ChildCategory
 class ChildCategoryBase(BaseModel):
@@ -9,6 +10,13 @@ class ChildCategoryBase(BaseModel):
 
     class Config:
         orm_mode = True
+
+class ChildCategoryProduct(BaseModel):
+    id: int
+    name: str
+    parent_category_id: int
+    parent_category: ParentCategoryProduct
+
 
 # Schema for creating a new ChildCategory
 class ChildCategoryCreate(BaseModel):

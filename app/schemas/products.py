@@ -2,7 +2,7 @@ from fastapi import UploadFile
 from pydantic import BaseModel, Field, validator
 from datetime import datetime
 from typing import List, Optional
-from app.schemas.category_child import ChildCategoryBase
+from app.schemas.category_child import ChildCategoryProduct, ChildCategoryBase
 
 class BaseConfig:
     from_attributes = True
@@ -23,7 +23,7 @@ class ProductBase(BaseModel):
     favourite: bool
     recomended: bool
     child_category_id: int
-    child_category: ChildCategoryBase
+    child_category: ChildCategoryProduct
 
     class Config:
         orm_mode = True
@@ -43,9 +43,16 @@ class ProductCreate(BaseModel):
     favourite: bool
     recomended: bool
     child_category_id: int
+
+    @validator('price')
+    def validate_price(cls, v):
+        if v is None or v <= 0:
+            raise ValueError("Price must be a positive integer")
+        return v
     
     class Config:
         orm_mode = True
+
 
 # Schema for updating an existing Product
 class ProductUpdate(BaseModel):

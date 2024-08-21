@@ -59,8 +59,9 @@ class ProductService:
         if not db_product:
             ResponseHandler.not_found_error("Product", product_id)
 
-        for key, value in updated_product.dict().items():
-            setattr(db_product, key, value)
+        for key, value in updated_product.dict(exclude_unset=True).items():
+            if value is not None:
+                setattr(db_product, key, value)
 
         db.commit()
         db.refresh(db_product)
