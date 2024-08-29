@@ -50,6 +50,16 @@ class CartItem(Base):
     product = relationship("Product", back_populates="cart_items")
 
 
+class Brand(Base):
+    __tablename__ = "brands"
+
+    id = Column(Integer, primary_key=True, nullable=False, unique=True, autoincrement=True)
+    name = Column(String, unique=True, nullable=False)
+
+    # Relationship with parent categories
+    products = relationship("Product", back_populates="brand", cascade="all, delete-orphan")
+
+
 
 
 class GrandCategory(Base):
@@ -105,7 +115,6 @@ class Product(Base):
     discount_percentage = Column(Float, nullable=False)
     rating = Column(Float, nullable=False)
     stock = Column(Integer, nullable=False)
-    brand = Column(String, nullable=False)
     thumbnail = Column(String, nullable=False)
     images = Column(ARRAY(String), nullable=False)
     is_published = Column(Boolean, server_default="True", nullable=False)
@@ -118,6 +127,10 @@ class Product(Base):
 
     # Relationship with child category
     child_category = relationship("ChildCategory", back_populates="products")
+
+    brands_id = Column(Integer, ForeignKey("brands.id", ondelete="CASCADE"), nullable=True)
+
+    brand = relationship("Brand", back_populates="products")
 
     # Relationship with cart items
     cart_items = relationship("CartItem", back_populates="product")
@@ -135,63 +148,3 @@ class Blog(Base):
     text = Column(String, nullable=False)
     image = Column(String, nullable=False)
 
-
-
-# class HeaderTabs(Base):
-#     __tablename__ = "header_tab"
-
-#     id = Column(Integer, primary_key=True, nullable=False, unique=True, autoincrement=True)
-#     name = Column(String, unique=True, nullable=False)
-    
-#     # Relationship with SubHeaderTabs
-#     sub_header_tabs = relationship("SubHeaderTabs", back_populates="header_tab", cascade="all, delete")
-
-
-# class SubHeaderTabs(Base):
-#     __tablename__ = "sub_header_tabs"
-
-#     id = Column(Integer, primary_key=True, nullable=False, unique=True, autoincrement=True)
-#     name = Column(String, unique=True, nullable=False)
-
-#     # Relationship with HeaderTabs
-#     header_tab_id = Column(Integer, ForeignKey('header_tab.id', ondelete="CASCADE"), nullable=False)
-#     header_tab = relationship("HeaderTabs", back_populates="sub_header_tabs")
-
-#     # Relationship with HeaderProducts
-#     header_products = relationship("HeaderProducts", back_populates="sub_header_tabs", cascade="all, delete")
-#     header_articles = relationship("HeaderArticles", back_populates="sub_header_tabs")
-
-
-
-# class HeaderProducts(Base):
-#     __tablename__ = "header_products"
-
-#     id = Column(Integer, primary_key=True, nullable=False, unique=True, autoincrement=True)
-#     title = Column(String, nullable=False)
-#     description = Column(String, nullable=False)
-#     price = Column(Integer, nullable=False)
-#     discount_percentage = Column(Float, nullable=False)
-#     rating = Column(Float, nullable=False)
-#     stock = Column(Integer, nullable=False)
-#     brand = Column(String, nullable=False)
-#     thumbnail = Column(String, nullable=False)
-#     images = Column(ARRAY(String), nullable=False)
-#     is_published = Column(Boolean, server_default="True", nullable=False)
-#     created_at = Column(TIMESTAMP(timezone=True), server_default=text("NOW()"), nullable=False)
-
-#     # Relationship with SubHeaderTabs
-#     sub_header_tabs_id = Column(Integer, ForeignKey("sub_header_tabs.id", ondelete="CASCADE"), nullable=False)
-#     sub_header_tabs = relationship("SubHeaderTabs", back_populates="header_products")
-
-
-# class HeaderArticles(Base):
-#     __tablename__ = "header_articles"
-
-#     id = Column(Integer, primary_key=True, nullable=False, unique=True, autoincrement=True)
-#     title = Column(String, nullable=False)
-#     content = Column(JSON, nullable=False)  # Use JSON to store structured content
-#     created_at = Column(TIMESTAMP(timezone=True), server_default=text("NOW()"), nullable=False)
-
-#     # Allow NULL values for sub_header_tabs_id
-#     sub_header_tabs_id = Column(Integer, ForeignKey("sub_header_tabs.id", ondelete="CASCADE"), nullable=True)
-#     sub_header_tabs = relationship("SubHeaderTabs", back_populates="header_articles")

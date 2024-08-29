@@ -3,10 +3,13 @@ from pydantic import BaseModel, Field, validator
 from datetime import datetime
 from typing import List, Optional
 from app.schemas.category_child import ChildCategoryProduct, ChildCategoryBase
+from app.schemas.brand import BrandProduct
 
 class BaseConfig:
     from_attributes = True
 # Base schema for Product
+
+
 class ProductBase(BaseModel):
     id: int
     title: str
@@ -15,7 +18,8 @@ class ProductBase(BaseModel):
     discount_percentage: float
     rating: float
     stock: int
-    brand: str
+    brands_id: int
+    brand: BrandProduct
     thumbnail: str
     images: List[str]
     is_published: bool = Field(default=True)
@@ -36,7 +40,7 @@ class ProductCreate(BaseModel):
     discount_percentage: float
     rating: float
     stock: int
-    brand: str
+    brands_id: int
     thumbnail: str
     images: List[str]
     is_published: Optional[bool] = Field(default=True)
@@ -62,7 +66,7 @@ class ProductUpdate(BaseModel):
     discount_percentage: Optional[float] = None
     rating: Optional[float] = None
     stock: Optional[int] = None
-    brand: Optional[str] = None
+    brands_id: Optional[int] = None
     thumbnail: Optional[str] = None
     images: Optional[List[str]] = None
     is_published: Optional[bool] = None

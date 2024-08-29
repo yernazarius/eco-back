@@ -1,7 +1,7 @@
 # app/services/products.py
 import os
 from sqlalchemy.orm import Session
-from app.models.models import Product, ChildCategory
+from app.models.models import Product, ChildCategory, Brand
 from app.schemas.products import ProductCreate, ProductUpdate
 from app.utils.responses import ResponseHandler
 from fastapi import UploadFile
@@ -28,6 +28,10 @@ class ProductService:
         category_exists = db.query(ChildCategory).filter(ChildCategory.id == product.child_category_id).first()
         if not category_exists:
             return ResponseHandler.not_found_error("Category", product.child_category_id)
+        
+        brand_exists = db.query(Brand).filter(Brand.id == product.brands_id).first()
+        if not brand_exists:
+            return ResponseHandler.not_found_error("Brand", product.brands_id)
 
         # Convert ProductCreate to Product SQLAlchemy model instance
         db_product = Product(
@@ -37,7 +41,7 @@ class ProductService:
             discount_percentage=product.discount_percentage,
             rating=product.rating,
             stock=product.stock,
-            brand=product.brand,
+            brands_id=product.brands_id,
             thumbnail=product.thumbnail,
             images=product.images,
             is_published=product.is_published,

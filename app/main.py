@@ -1,5 +1,5 @@
 from fastapi.staticfiles import StaticFiles
-from app.routers import products, category_grand, category_child, category_parent, carts, users, auth, accounts, blogs
+from app.routers import products, category_grand, category_child, category_parent, carts, users, auth, accounts, blogs, brand
 from fastapi import FastAPI
 
 
@@ -50,6 +50,7 @@ app.include_router(products.router)
 app.include_router(category_grand.router)
 app.include_router(category_parent.router)
 app.include_router(category_child.router)
+app.include_router(brand.router)
 app.include_router(carts.router)
 app.include_router(users.router)
 app.include_router(accounts.router)
