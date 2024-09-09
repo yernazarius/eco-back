@@ -23,9 +23,10 @@ class BlogService:
 
     @staticmethod
     async def create_blog(db: Session, blog_data: dict, image: UploadFile):
-        if image:
-            image_path = await BlogService.save_file(image, "blogs")
-            blog_data["image"] = image_path
+        # if image:
+        #     image_path = await BlogService.save_file(image, "blogs")
+        #     blog_data["image"] = image_path
+        create
         db_blog = Blog(**blog_data)
         db.add(db_blog)
         db.commit()
