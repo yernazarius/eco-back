@@ -43,7 +43,7 @@ async def create_blog(
     image: str = Form(...),
     db: Session = Depends(get_db)
 ):
-    blog_data = {"title": title, "text": text, "image": None}
+    blog_data = {"title": title, "text": text, "image": image}
     return await BlogService.create_blog(db, blog_data, image)
 
 

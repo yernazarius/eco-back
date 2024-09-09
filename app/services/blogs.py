@@ -26,7 +26,8 @@ class BlogService:
         # if image:
         #     image_path = await BlogService.save_file(image, "blogs")
         #     blog_data["image"] = image_path
-        create
+        # create
+        print(blog_data)
         db_blog = Blog(**blog_data)
         db.add(db_blog)
         db.commit()
