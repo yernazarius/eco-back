@@ -40,7 +40,7 @@ def get_blog(blog_id: int, db: Session = Depends(get_db)):
 async def create_blog(
     title: str = Form(...),
     text: str = Form(...),
-    image: UploadFile = File(None),
+    image: str = Form(...),
     db: Session = Depends(get_db)
 ):
     blog_data = {"title": title, "text": text, "image": None}
