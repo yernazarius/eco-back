@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 allowed_origins = [
     "http://localhost:3000",
-    "http://194.110.55.21"
+    "https://ecoinstrument.com.kz/"
 ]
 
 app.add_middleware(
